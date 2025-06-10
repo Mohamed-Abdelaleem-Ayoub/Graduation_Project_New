@@ -16,7 +16,7 @@
     </queries>
 
     <application
-        android:label="local_notifications"
+        android:label="Mamy Guide"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
 

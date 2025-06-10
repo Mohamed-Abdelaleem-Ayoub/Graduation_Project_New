@@ -33,54 +33,7 @@ class BookInfoPage extends StatelessWidget {
               ),
             ),
           ),
-          // const Row(
-          //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          //   children: [
-          //     Text(
-          //       'Trending',
-          //       style: TextStyle(
-          //         color: Color(0xffA16F83),
-          //         fontSize: 13,
-          //         fontWeight: FontWeight.w700,
-          //         fontFamily: kFontFamily,
-          //       ),
-          //     ),
-          //     Icon(Icons.local_fire_department_rounded, color: Colors.orange),
-          //     Text(
-          //       '5 min read',
-          //       style: TextStyle(
-          //         color: Color(0xffA16F83),
-          //         fontSize: 12,
-          //         fontWeight: FontWeight.w400,
-          //         fontFamily: kFontFamily,
-          //       ),
-          //     ),
-          //     Column(
-          //       children: [
-          //         Text(
-          //           maxLines: 2,
-          //           'Published at ',
-          //           style: TextStyle(
-          //             color: Color(0xffA16F83),
-          //             fontSize: 12,
-          //             fontWeight: FontWeight.w400,
-          //             fontFamily: kFontFamily,
-          //           ),
-          //         ),
-          //         Text(
-          //           maxLines: 2,
-          //           'December,24,2025',
-          //           style: TextStyle(
-          //             color: Color(0xffA16F83),
-          //             fontSize: 12,
-          //             fontWeight: FontWeight.w400,
-          //             fontFamily: kFontFamily,
-          //           ),
-          //         ),
-          //       ],
-          //     ),
-          //   ],
-          // ),
+
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16),
             child: Center(

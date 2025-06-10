@@ -44,8 +44,13 @@ dependencies:
   # workmanager: ^0.6.0
   workmanager: ^0.6.0
   youtube_player_flutter: ^9.1.1
-  #flutter_local_notifications: ^19.2.0
-  #timezone: ^0.10.1
+  flutter_launcher_icons: ^0.13.1
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/3f6e580f6983fcb59889814757b99134a4f552b5.png"
+  remove_alpha_ios: true
 
 dev_dependencies:
 
@@ -75,6 +80,7 @@ flutter:
     - assets/images/2-removebg-preview (1) 1.png
     - assets/images/Specialistimages/
     - assets/books/
+    - assets/images/3f6e580f6983fcb59889814757b99134a4f552b5.png
    
 
   # An image asset can refer to one or more resolution-specific "variants", see

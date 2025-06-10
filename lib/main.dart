@@ -5,7 +5,7 @@ import 'package:graduation_project/pages/all_videos.dart';
 import 'package:graduation_project/pages/chat_bot_screen.dart';
 import 'package:graduation_project/pages/consultants_page.dart';
 import 'package:graduation_project/services/notification_service.dart';
- // ✅ إضافة جديدة
+// ✅ إضافة جديدة
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,7 +30,7 @@ class GraduationProject extends StatelessWidget {
         ChatBotPage.id: (context) => const ChatBotPage(),
         AllVideosPage.id: (context) => const AllVideosPage(),
       },
-      initialRoute: ConsultantPage.id,
+      initialRoute: ChatBotPage.id,
     );
   }
 }

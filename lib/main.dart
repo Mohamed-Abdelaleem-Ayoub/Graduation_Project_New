@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:graduation_project/pages/all_books_page.dart';
-import 'package:graduation_project/pages/all_speaker_videos.dart';
+
 import 'package:graduation_project/pages/all_videos.dart';
 import 'package:graduation_project/pages/chat_bot_screen.dart';
 import 'package:graduation_project/pages/consultants_page.dart';
@@ -25,12 +25,11 @@ class GraduationProject extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       routes: {
         AllBooksPage.id: (context) => const AllBooksPage(),
-        AllSpeakerVideosPage.id: (context) => const AllSpeakerVideosPage(),
         ConsultantPage.id: (context) => const ConsultantPage(),
         ChatBotPage.id: (context) => const ChatBotPage(),
         AllVideosPage.id: (context) => const AllVideosPage(),
       },
-      initialRoute: ChatBotPage.id,
+      initialRoute: ConsultantPage.id,
     );
   }
 }

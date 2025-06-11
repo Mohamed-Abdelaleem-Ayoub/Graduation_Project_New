@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:graduation_project/constans.dart';
+import 'package:graduation_project/constants.dart';
 import 'package:graduation_project/models/book_model.dart';
 import 'package:graduation_project/services/get_all_books_service.dart';
 import 'package:graduation_project/widgets/all_books_list.dart';
@@ -49,42 +49,31 @@ class _AllBooksPageState extends State<AllBooksPage> {
         backgroundColor: kBackgroundColor,
         elevation: 0,
         title: const Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Hi , ',
+              '📚 جميع الكتب',
+
               style: TextStyle(
                 color: Color(0xff333333),
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            Text(
-              'Jenny',
-              style: TextStyle(
-                color: Color(0xffFF8EA2),
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 8.0),
-              child: Icon(
-                Icons.waving_hand_rounded,
-                color: Colors.amber,
-                size: 15,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ],
         ),
         actions: const [
-          Icon(Icons.settings),
           Padding(
-            padding: EdgeInsets.only(left: 8),
-            child: Icon(Icons.notifications_none),
+            padding: EdgeInsets.only(right: 8),
+            child: Icon(Icons.settings, color: Colors.black87),
+          ),
+          Padding(
+            padding: EdgeInsets.only(right: 8),
+            child: Icon(Icons.notifications_none, color: Colors.black87),
           ),
         ],
       ),
+
       body: FutureBuilder<List<BookModel>>(
         future: _booksFuture,
         builder: (context, snapshot) {
@@ -97,16 +86,14 @@ class _AllBooksPageState extends State<AllBooksPage> {
           }
 
           return Padding(
-            padding: const EdgeInsets.only(top: 16.0),
+            padding: const EdgeInsets.only(top: 8.0),
             child: CustomScrollView(
               physics: const BouncingScrollPhysics(),
               slivers: [
-                const SliverToBoxAdapter(child: SizedBox(height: 20)),
-                //    const   SliverToBoxAdapter(child: SizedBox(height: 20)),
+                const SliverToBoxAdapter(child: SizedBox(height: 10)),
                 SliverToBoxAdapter(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
-
                     child: TextField(
                       controller: searchController,
                       decoration: InputDecoration(
@@ -127,7 +114,7 @@ class _AllBooksPageState extends State<AllBooksPage> {
                     ),
                   ),
                 ),
-                const SliverToBoxAdapter(child: SizedBox(height: 120)),
+                const SliverToBoxAdapter(child: SizedBox(height: 16)),
                 AllBooksList(books: filteredBooks),
               ],
             ),

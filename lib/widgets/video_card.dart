@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:graduation_project/models/vodeo_model.dart';
 import 'package:graduation_project/pages/video_player_page.dart';
-//import 'package:graduation_project/pages/video_player_page.dart';
 
 class VideoCard extends StatelessWidget {
   final YoutubeVideoModel videoModel;
@@ -20,45 +19,50 @@ class VideoCard extends StatelessWidget {
           ),
         );
       },
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(
-              top: 8,
-              left: 8,
-              right: 8,
-              bottom: 16,
-            ),
-            child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: 300,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                image: DecorationImage(
-                  fit: BoxFit.fill,
-                  image: NetworkImage(videoModel.image),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // صورة الفيديو مع أيقونة تشغيل
+            Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: Image.network(
+                    videoModel.image,
+                    height: 200,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
                 ),
-              ),
-
-              child: const Icon(Icons.play_circle_fill_rounded, weight: 35),
+                const Positioned.fill(
+                  child: Center(
+                    child: Icon(
+                      Icons.play_circle_fill_rounded,
+                      size: 65,
+                      color: Colors.white70,
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 6),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: Text(
-                textDirection: TextDirection.rtl,
+            const SizedBox(height: 10),
 
-                videoModel.title,
-                textAlign: TextAlign.start,
-
-                maxLines: 2,
-                style: const TextStyle(color: Color(0xff000000)),
+            // عنوان الفيديو فقط
+            Text(
+              videoModel.title,
+              textDirection: TextDirection.rtl,
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: Color(0xff222222),
               ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

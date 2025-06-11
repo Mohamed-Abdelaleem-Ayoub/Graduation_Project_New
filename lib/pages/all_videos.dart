@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:graduation_project/models/vodeo_model.dart';
 import 'package:graduation_project/services/get_all_videos_sercie.dart';
+import 'package:graduation_project/services/video_search.dart';
+
 import 'package:graduation_project/widgets/today_date.dart';
 import 'package:graduation_project/widgets/video_card.dart';
-import 'package:graduation_project/widgets/videos_category_list.dart';
+
 import 'package:intl/intl.dart';
 
-// code with search
 class AllVideosPage extends StatefulWidget {
   static String id = 'AllViedosPage';
   const AllVideosPage({super.key});
@@ -23,6 +24,10 @@ class _AllVideosPageState extends State<AllVideosPage> {
   List<YoutubeVideoModel> allVideos = [];
   List<YoutubeVideoModel> filteredVideos = [];
 
+  bool isSearching = false;
+  bool isLoadingSearch = false;
+  String? searchError;
+
   @override
   void initState() {
     super.initState();
@@ -33,65 +38,83 @@ class _AllVideosPageState extends State<AllVideosPage> {
     });
   }
 
-  void filterSearchResults(String query) {
-    if (query.isEmpty) {
+  Future<void> performSmartSearch(String query) async {
+    setState(() {
+      isSearching = true;
+      isLoadingSearch = true;
+      searchError = null;
+    });
+
+    try {
+      final searchResults = await SearchService.searchVideos(query);
+
+      // نربط النتائج بالـ YoutubeVideoModel الموجود (لو العنوان مطابق)
+      final matchedVideos =
+          allVideos.where((video) {
+            return searchResults.any(
+              (result) =>
+                  result["title"]!.toLowerCase().trim() ==
+                  video.title.toLowerCase().trim(),
+            );
+          }).toList();
+
       setState(() {
+        filteredVideos = matchedVideos;
+      });
+    } catch (e) {
+      setState(() {
+        searchError = e.toString();
+      });
+    } finally {
+      setState(() {
+        isLoadingSearch = false;
+      });
+    }
+  }
+
+  void onSearchChanged(String query) {
+    if (query.trim().isEmpty) {
+      setState(() {
+        isSearching = false;
         filteredVideos = allVideos;
+        searchError = null;
       });
       return;
     }
 
-    setState(() {
-      filteredVideos =
-          allVideos.where((video) {
-            return video.title.toLowerCase().contains(query.toLowerCase());
-          }).toList();
-    });
+    performSmartSearch(query);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white,
         elevation: 0,
-        title: const Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Hi , ',
-              style: TextStyle(
-                color: Color(0xff333333),
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            Text(
-              'Jenny',
-              style: TextStyle(
-                color: Color(0xffFF8EA2),
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 8.0),
-              child: Icon(
-                Icons.waving_hand_rounded,
-                color: Colors.amber,
-                size: 15,
-              ),
-            ),
-          ],
+        title: const Text(
+          "أهلاً بك في عالم التربية 👶🎓",
+          style: TextStyle(
+            color: Color(0xff333333),
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-        actions: const [
-          Icon(Icons.settings),
-          Padding(
-            padding: EdgeInsets.only(left: 8),
-            child: Icon(Icons.notifications_none),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh, color: Color(0xffFF8EA2)),
+            tooltip: 'إعادة تحميل',
+            onPressed: () {
+              searchController.clear();
+              setState(() {
+                isSearching = false;
+                filteredVideos = allVideos;
+              });
+            },
           ),
         ],
       ),
+
       body: FutureBuilder<List<YoutubeVideoModel>>(
         future: _videosFuture,
         builder: (context, snapshot) {
@@ -99,8 +122,6 @@ class _AllVideosPageState extends State<AllVideosPage> {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('حدث خطأ: ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: Text('لا توجد فيديوهات حالياً'));
           }
 
           return CustomScrollView(
@@ -111,37 +132,45 @@ class _AllVideosPageState extends State<AllVideosPage> {
                   padding: const EdgeInsets.all(16.0),
                   child: TextField(
                     controller: searchController,
+                    onChanged: onSearchChanged,
                     decoration: InputDecoration(
-                      hintText: 'ابحث عن فيديو...',
+                      hintText: '🔍 ابحثي عن مشكلة بتواجهك مع طفلك',
+
                       prefixIcon: const Icon(Icons.search),
                       suffixIcon: IconButton(
                         icon: const Icon(Icons.clear),
                         onPressed: () {
                           searchController.clear();
-                          filterSearchResults('');
+                          onSearchChanged('');
                         },
                       ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    onChanged: filterSearchResults,
                   ),
                 ),
               ),
-              const SliverToBoxAdapter(
-                child: SizedBox(height: 50, child: CategoryList()),
-              ),
-              SliverToBoxAdapter(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: filteredVideos.length,
-                  itemBuilder: (context, index) {
-                    final video = filteredVideos[index];
-                    return VideoCard(videoModel: video);
-                  },
+
+              if (isLoadingSearch)
+                const SliverToBoxAdapter(
+                  child: Center(child: CircularProgressIndicator()),
                 ),
+              if (searchError != null)
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text(
+                      searchError!,
+                      style: const TextStyle(color: Colors.red),
+                    ),
+                  ),
+                ),
+              SliverList(
+                delegate: SliverChildBuilderDelegate((context, index) {
+                  final video = filteredVideos[index];
+                  return VideoCard(videoModel: video);
+                }, childCount: filteredVideos.length),
               ),
             ],
           );

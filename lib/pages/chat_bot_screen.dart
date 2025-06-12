@@ -20,6 +20,25 @@ class _ChatBotPageState extends State<ChatBotPage> {
   static const apiKey =
       "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";
 
+  List<Map<String, String>> getChatHistory() {
+    List<Map<String, String>> history = [
+      {
+        "role": "system",
+        "content":
+            "أنت مساعد تربوي يساعد الأمهات ويقدم نصائح متصلة بناءً على سياق الحديث. قم بالرد بنفس لغة المستخدم.",
+      },
+    ];
+
+    for (var m in _messages) {
+      history.add({
+        "role": m.isUser ? "user" : "assistant",
+        "content": m.message,
+      });
+    }
+
+    return history;
+  }
+
   Future<void> sendMessage() async {
     final message = _userMessage.text.trim();
     if (message.isEmpty) return;
@@ -41,10 +60,7 @@ class _ChatBotPageState extends State<ChatBotPage> {
       final body = jsonEncode({
         "model": "llama3-70b-8192",
         "messages": [
-          {
-            "role": "system",
-            "content": "Respond in the same language the user uses.",
-          },
+          ...getChatHistory(),
           {"role": "user", "content": message},
         ],
         "temperature": 0.7,
@@ -63,7 +79,7 @@ class _ChatBotPageState extends State<ChatBotPage> {
         });
       } else {
         throw Exception(
-          "Status Code: \${response.statusCode}\n\${response.body}",
+          "Status Code: ${response.statusCode}\n${response.body}",
         );
       }
     } catch (e) {
@@ -71,7 +87,7 @@ class _ChatBotPageState extends State<ChatBotPage> {
         _messages.add(
           Message(
             isUser: false,
-            message: "❌ Error: \${e.toString()}",
+            message: "❌ Error: ${e.toString()}",
             date: DateTime.now(),
           ),
         );
@@ -157,7 +173,7 @@ class _ChatBotPageState extends State<ChatBotPage> {
                         borderSide: const BorderSide(color: kBackgroundColor),
                         borderRadius: BorderRadius.circular(50),
                       ),
-                      label: const Text("Ask ChatGPT..."),
+                      label: const Text("اسأل مامي جايد..."),
                     ),
                   ),
                 ),

@@ -29,7 +29,7 @@ class GraduationProject extends StatelessWidget {
         ChatBotPage.id: (context) => const ChatBotPage(),
         AllVideosPage.id: (context) => const AllVideosPage(),
       },
-      initialRoute: ChatBotPage.id,
+      initialRoute: AllVideosPage.id,
     );
   }
 }
